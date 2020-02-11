@@ -1,0 +1,47 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.success-message {
+  display: none;
+}
+
+.post-content {
+  &-number-h,
+  &-name-h,
+  &-age-h,
+  &-sex-h,
+  &-from-h {
+    font-weight: bold;
+  }
+}
+
+.view {
+  display: none;
+}
+
+#post-content {
+  th,
+  td {
+    padding: 10px 20px;
+  }
+}
+
+.meibo-heading {
+  position: relative;
+}
+
+.current-email {
+  position: absolute;
+  right: 10%;
+  color: #ccc;
+  font-weight: lighter;
+  font-size: 16px;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+
+.error-text {
+  color: red;
+}

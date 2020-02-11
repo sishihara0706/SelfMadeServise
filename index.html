@@ -1,13 +1,212 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>自作フリマサービス</title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-  <script src="js/main.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Firebase Login Form</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- ログインページ -->
+    <div id="login_page" class="view">
+      <div class="container">
+        <h1>ログインページ</h1>
+        <!-- <h2 class="success-message" style="color: red;">ログイン成功!</h2> -->
+        <form>
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              aria-describedby="emailHelp"
+              placeholder="メールアドレスを入力してください"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              placeholder="パスワードを入力してください"
+              required
+            />
+          </div>
+          <div class="form-group form-check">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="exampleCheck1"
+              disabled
+            />
+            <label class="form-check-label" for="exampleCheck1"
+              >Check me out</label
+            >
+          </div>
+          <div class="errorLogin error-text"></div>
+          <input
+            id="loginBtn"
+            type="button"
+            class="btn btn-danger"
+            value="ログイン"
+          />
+          <input
+            id="googleLoginBtn"
+            type="button"
+            class="btn btn-info"
+            value="Googleでログイン"
+            disabled
+          />
+
+          <input
+            id="newuserBtn"
+            type="button"
+            class="btn btn-warning"
+            value="新規登録"
+          />
+        </form>
+      </div>
+    </div>
+
+    <!-- TOPページ -->
+    <div id="top" class="display-none view ">
+      <div class="container">
+        <h2 class="py-5 text-center meibo-heading">
+          名簿登録<small class="current-email"></small>
+        </h2>
+        <p></p>
+        <div class="">
+          <form>
+            <div class="form-group">
+              <label for="name">名前</label>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                placeholder="名前を入力してください"
+                required
+                value=""
+              />
+            </div>
+
+            <div class="form-group form-check-inline">
+              <input
+                type="radio"
+                class="form-check-input"
+                id="man"
+                name="sex"
+                value="1"
+              />男
+            </div>
+            <div class="form-group form-check-inline">
+              <input
+                type="radio"
+                class="form-check-input"
+                id="woman"
+                name="sex"
+                value="2"
+              />女
+            </div>
+
+            <div class="form-group">
+              <label for="name">年齢</label>
+              <input
+                type="number"
+                class="form-control"
+                id="age"
+                placeholder="年齢を入力してください"
+                value=""
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="from">出身地</label>
+              <input
+                type="text"
+                class="form-control"
+                id="from"
+                placeholder="出身地を入力してください"
+                value=""
+                required
+              />
+            </div>
+            <div id="errorOut" style="color:red;"></div>
+          </form>
+        </div>
+        <button class="btn btn-primary post-btn mx-auto">投稿する</button>
+        <input
+          type="button"
+          class="btn btn-success logout-btn"
+          value="ログアウト"
+        />
+
+        <!-- 投稿内容 -->
+        <h2 class="text-center py-5">名簿一覧</h2>
+        <div id="post-content" class="pb-5">
+          <div class="container">
+            <div class="mx-auto">
+              <div class="row">
+                <div class="col-md-1 post-content-number-h">番号</div>
+                <div class="col-md-4 post-content-name-h">名前</div>
+                <div class="col-md-2 post-content-age-h">年齢</div>
+                <div class="col-md-2 post-content-sex-h">性別</div>
+                <div class="col-md-3 post-content-from-h">出身地</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ユーザー登録のテンプレート -->
+    <div id="post-content-template">
+      <div class="row postRow">
+        <div class="col-md-1 post-content-number"></div>
+        <div class="col-md-4 post-content-name"></div>
+        <div class="col-md-2 post-content-age"></div>
+        <div class="col-md-2 post-content-sex"></div>
+        <div class="col-md-3 post-content-from"></div>
+      </div>
+    </div>
+
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-database.js"></script>
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+      https://firebase.google.com/docs/web/setup#available-libraries -->
+    <!-- <script src="https://www.gstatic.com/firebasejs/7.8.1/firebase-analytics.js"></script> -->
+
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyCnmb4vySqIdaSTi6MZGx0q9pGD3gV_uIo",
+        authDomain: "fmofselfmade.firebaseapp.com",
+        databaseURL: "https://fmofselfmade.firebaseio.com",
+        projectId: "fmofselfmade",
+        storageBucket: "fmofselfmade.appspot.com",
+        messagingSenderId: "1072231088834",
+        appId: "1:1072231088834:web:333b51639f285ef764315b",
+        measurementId: "G-ZNB3J88GEF"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      // firebase.analytics();
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <script src="js/main.js"></script>
+  </body>
 </html>
